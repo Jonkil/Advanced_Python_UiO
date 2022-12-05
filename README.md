@@ -1,4 +1,10 @@
-# IN4110-assemm
+# IN4110 – Problem Solving with High-Level Languages
+
+FALL 2022 UiO
+
+Link: https://www.uio.no/studier/emner/matnat/ifi/IN3110/h22/index.html
+
+Lectures and course materials: https://uio-in3110.github.io
 
 
 ### Assignment 1: Init with git
