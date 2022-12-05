@@ -20,9 +20,8 @@ Link: https://uio-in3110.github.io/assignments/assignment3/assignment3.html
 
 ### Peer review report of the Assignment 3
 
-#### Notes to those who will grade this peer review assignment 3:
+Link: https://github.com/UiO-IN3110/UiO-IN3110.github.io/blob/main/assignments/peer_review_instructions.md
 
-This assignment is about peer reviewing codes of the Assignment 3 done by IN3110-annicas (https://github.uio.no/IN3110/IN3110-annicas).
 
 ---
 
@@ -33,9 +32,7 @@ Link: https://uio-in3110.github.io/assignments/assignment4/assignment4.html
 ---
 ### Peer review report of the Assignment 4
 
-#### Notes to those who will grade the second peer review assignment 4:
-
-This assignment is about peer reviewing codes of the Assignment 4 done by IN3110-sakithab (https://github.uio.no/IN3110/IN3110-sakithab).
+Link: https://github.com/UiO-IN3110/UiO-IN3110.github.io/blob/main/assignments/peer_review_instructions.md
 
 ---
 
