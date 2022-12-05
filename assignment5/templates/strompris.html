@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Strømpris</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+
+      .error {
+        color: red;
+      }
+      .topnav {
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+
+      .topnav a:hover {
+        background-color: #69dadb;
+        color: black;
+      }
+
+      .topnav a.active {
+        background-color: #193498;
+        color: white;
+      }
+    </style>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm//vega@5"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm//vega-lite@5.6.0"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm//vega-embed@6"
+    ></script>
+  </head>
+  <body>
+    <h1>Electricity prices in Norway by {{ today }}</h1>
+    <!-- Add Navigation Bar to Docs.
+    -->
+    <div class="topnav">
+      <a class="active" href="/">Home</a>
+      <a href="/docs">FastAPI Docs</a>
+      <a href="/docs/_build/html/index.html">Help</a>
+    </div>
+    <h3>Prices are fetched from the webpage <a href="https://www.hvakosterstrommen.no">hvakosterstrommen.no</a>.</h3>
+    <p>The plot is interactive. You can zoom in/out and move the graph!</p>
+    <div id="vis"></div>
+    <!-- Create Form -->
+    <form action="javascript:refreshPlot()" id="price-form">
+      
+      <p>You can choose different locations to view.</p></br>
+      <input type="checkbox" name="locations" value="NO1" />
+      <label for="locations">Oslo</label><br />
+      <input type="checkbox" name="locations" value="NO2" />
+      <label for="locations">Kristiansand</label><br />
+      <input type="checkbox" name="locations" value="NO3" />
+      <label for="locations">Trondheim</label><br />
+      <input type="checkbox" name="locations" value="NO4" />
+      <label for="locations">Tromsø</label><br />
+      <input type="checkbox" name="locations" value="NO5" />
+      <label for="locations">Bergen</label><br />
+
+      <label for="end">End date:</label>
+      <input type="date" id="end" name="end" value="{{ today }}" min="2022-10-17" max="{{ today }}" />
+      
+      <label for="days">Days:</label>
+      <input type="number" id="days" name="days" value=7 min=1 max=14 />
+
+      <button type="submit">Refresh</button>
+    </form>
+    <p><strong>Note:</strong> prices are not available for dates before 02/10/2022.</p>
+    <script type="text/javascript">
+      async function refreshPlot() {
+        // begin constructing URL to request the plot JSON
+        const plotUrl = new URL(
+          `${document.location.protocol}//${document.location.host}/plot_prices.json`
+        );
+
+        // get inputs from the form
+
+        // get selected location checkboxes
+        for (checkbox of document
+          .getElementById("price-form")
+          .querySelectorAll("input[name=locations]")) {
+          if (checkbox.checked) {
+            plotUrl.searchParams.append("locations", checkbox.value);
+          }
+        }
+        var endInput = document.getElementById("end");
+        if (endInput) {
+          plotUrl.searchParams.append("end", endInput.value);
+        } else {
+          console.warn('No input with id="end"');
+        }
+
+        var daysInput = document.getElementById("days");
+        if (daysInput) {
+          plotUrl.searchParams.append("days", daysInput.value);
+        } else {
+          console.warn('No input with id="days"');
+        }
+
+        console.log(`requesting new chart from ${plotUrl.href}`);
+        var response = await fetch(plotUrl.href);
+        var spec = await response.json();
+
+        var embedOpt = { mode: "vega-lite" };
+
+        function showError(el, error) {
+          el.innerHTML =
+            '<div class="error" style="color:red;">' +
+            "<p>JavaScript Error: " +
+            error.message +
+            "</p>" +
+            "<p>This usually means there's a typo in your chart specification. " +
+            "See the javascript console for the full traceback.</p>" +
+            "</div>";
+          throw error;
+        }
+        const el = document.getElementById("vis");
+        vegaEmbed("#vis", spec, embedOpt).catch((error) =>
+          showError(el, error)
+        );
+      }
+      refreshPlot();
+    </script>
+  </body>
+</html>
